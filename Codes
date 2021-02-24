@@ -1,0 +1,145 @@
+*ARDUINO CODE
+
+#define sensorPin A2
+int outputpin= 0;
+int buzzer=5; 
+int temp;   
+const int sensormin=0;    
+const int sensormax=1000;  
+int value ;
+
+
+void   flame()
+  {
+  if(analogRead(A1) <100)
+  {
+    
+    
+    digitalWrite(buzzer,HIGH);
+    Serial.print("FIRE DETECTED!!!");
+    delay(2500);    
+    noTone (5);
+   }   
+   else{
+   Serial.print("No fire");
+   digitalWrite(buzzer,LOW);
+   }
+  }
+
+void water_level()
+{
+  value = analogRead(A2);
+  Serial.println(value);
+  delay(1000);
+   }
+
+void setup() {
+  pinMode(9, OUTPUT);
+  pinMode(buzzer,OUTPUT);    
+  Serial.begin(9600);
+  }
+
+void loop() 
+{
+
+temp = analogRead(A0);
+int rawvoltage= analogRead(A0);
+float millivolts= (rawvoltage/1024.0) * 5000;
+float celsius= millivolts/10;
+
+if(Serial.available())
+  {
+    char c = Serial.read();
+    if(c == '1')
+    {
+    digitalWrite(9,HIGH);
+    
+    }
+    else if(c == '0')
+    {
+    digitalWrite(9,LOW);
+   
+    }
+  }
+Serial.print(  celsius );
+Serial.print("  *  ");
+flame();
+Serial.print("  *  " );
+water_level();
+delay(500);  
+}
+  
+*C# CODE
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.IO.Ports;
+
+namespace FinalProject
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+            Control.CheckForIllegalCrossThreadCalls = false; // for the error that System.InvalidOperationException’ occurred in System.Windows.Forms.dll but was not handled in user code 
+           // link is: https:/www.gencayyildiz.com/blog/c-capraz-is-parcacigi-islemi-gecerli-degil-hatasi-ve-cozumu/
+            serialPort1.BaudRate = 9600;
+            serialPort1.PortName = "COM3";
+            serialPort1.Open();
+            serialPort1.DataReceived += serialPort1_DataReceived;
+        }
+        private void serialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
+        {
+           string Line = serialPort1.ReadLine(); //We split the analog data from serial with * delimiter which are temperature,flame and water level sensor datas.
+            // From serial
+            string[] message = Line.Split('*');
+            textBox1.Text = message[0]; // Temperature
+            textBox2.Text = message[1]; // Flame
+            progressBar1.Value = int.Parse(message[2]); // Water level
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            try { serialPort1.Open(); } catch{ }
+        }
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            try { serialPort1.Close(); } catch { }
+        }
+        // To serial
+        private void ledonbtn_Click(object sender, EventArgs e)
+        {
+            serialPort1.Write("1"); // Send 1 to serial for turn on the lamp
+            label1.Text = "LAMP ON";
+            ledonbtn.Enabled = false;
+            ledoffbtn.Enabled = true;
+        }
+
+        private void ledoffbtn_Click(object sender, EventArgs e)
+        {
+            serialPort1.Write("0");  // Send 0 to serial for turn off the lamp
+            label1.Text = "LAMP OFF";
+            ledonbtn.Enabled = true;
+            ledoffbtn.Enabled = false;
+        }
+
+        private void extbtn_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void eXITToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+    }
+}
+
+
