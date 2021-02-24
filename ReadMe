@@ -1,0 +1,31 @@
+Equipments I used: 
+Arduino UNO
+1 lamp
+1 flame sensor
+1 water level sensor
+1 LM35 temperature sensor
+1 buzzer
+2 breadboards
+Bunch of jumper wires
+
+Form Design
+5 Label
+3 Button
+2 TextBox
+1 SerialPort
+1 Progress Bar
+MenuStrip
+Conditions:  Form1 (text:HOME AUTOMATION  maximizeBox:False MinimizeBox:False)
+label1 (text:   )
+label2 (text:TEMPERATURE)
+label3 (text:^C)
+label4 (text:FIRE)
+label5 (text:WATER LEVEL)
+Button1 (name:ledonbtn  text:LAMP ON  backcolor:Lime)
+Button2 (name:ledoffbtn  text:LAMP OFF  backcolor:Red)
+Button3 (name:extbtn   text:EXIT)
+Textbox1 and Textbox2 (readonly:True)
+progressBar1 (min:0  max:420)
+menuStrip1 (ABOUT: Made by Sera Nur Darkılıç, EXIT)
+Font: Bookman Old Style
+
